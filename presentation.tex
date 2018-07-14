@@ -1,30 +1,36 @@
 \documentclass[aspectratio=169]{beamer}
 
-    \usepackage{natbib}
+\usepackage{natbib}
 
-    \usetheme{metropolis}           % Use metropolis theme
-    \title{
-        Disentangled Representation Learning for \\
-        Stylistic Variation in Neural Language Models}
-    \date{\today}
-    \author{Vineet John}
-    \institute{University of Waterloo}
+\usetheme{metropolis}           % Use metropolis theme
+\title{
+    Disentangled Representation Learning for \\
+    Stylistic Variation in Neural Language Models}
+\date{\today}
+\author{Vineet John}
+\institute{University of Waterloo}
 
 \begin{document}
 
 \maketitle
 
-
+\graphicspath{{images/}}
 
 \section{Motivation}
 
 \begin{frame}{Universal Function Approximators}
+	\begin{figure}[ht]
+		\centering
+		\includegraphics[width=\linewidth]{mlp-network}
+	\end{figure}
 \end{frame}
 
 \begin{frame}{Non-Interpretable Latent Representations}
 \end{frame}
 
 \begin{frame}{Problem Statement}
+	\centering
+	\Huge{Generate plausible sentences in a user-defined style, while retaining the original content of the source sentences.}
 \end{frame}
 
 % 
@@ -32,6 +38,20 @@
 \section{Background}
 
 \begin{frame}{Sequence Autoencoding}
+	\centering
+	\input{images/sequence-autoencoder.tex}
+
+	\tiny{Source: \cite{srivastava2015unsupervised}}
+\end{frame}
+
+\begin{frame}{Sequence Autoencoding}
+    \textbf{Text Reconstruction}
+    Predict next most likely word at each time step
+    \begin{equation}
+        P(x_1, x_2 \cdots x_t) = \prod_{i=1}^t P(x_i | x_1, \cdots, x_{i-1})
+    \end{equation}
+
+    Minimize the negative log-likelihood of each word, given the previous words
 \end{frame}
 
 \begin{frame}{Multi-Task Learning}
@@ -136,7 +156,7 @@
 
 \begin{frame}[allowframebreaks]
 	\bibliographystyle{unsrtnat}
-	\bibliography{uw-mmath-thesis-presentation}
+	\bibliography{presentation}
 \end{frame}
 
 \begin{frame}

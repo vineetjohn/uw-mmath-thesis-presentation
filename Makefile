@@ -1,4 +1,4 @@
-filename=uw-mmath-thesis-presentation
+filename=presentation
 build-dir=build
 
 all:
@@ -14,7 +14,7 @@ pdf:
 bib:
 	bibtex $(build-dir)/$(filename)
 
-read: pdf
+read: all
 	xdg-open $(build-dir)/$(filename).pdf &> /dev/null 
 
 clean:
