@@ -2,6 +2,8 @@
 
 \usepackage{natbib}
 
+\usetheme{metropolis}
+
 \hypersetup{
     pdfauthor={Vineet John}, 
     colorlinks=true,
@@ -11,9 +13,11 @@
     urlcolor=cyan
 }
 
+% Custom commands
 \newcommand{\imgsrc}[1]{\tiny{Source: #1}}
+\newcommand{\loss}[1]{\mathcal{L}_{#1}}
 
-\usetheme{metropolis}
+% Title Slide
 \title{
 	Disentangled Representation Learning\\
 	for Linguistic Style Transfer}
@@ -24,7 +28,6 @@
 \begin{document}
 
 \maketitle
-
 \graphicspath{{images/}}
 
 \section{Motivation}
@@ -34,23 +37,21 @@
 	\begin{figure}[ht]
 		\includegraphics[width=\linewidth]{mlp-network}
 	\end{figure}
-
-    \imgsrc{\url{http://corochann.com/mnist-training-with-multi-layer-perceptron-1149.html}}
+	\imgsrc{\url{http://corochann.com/mnist-training-with-multi-layer-perceptron-1149.html}}
 \end{frame}
 
 \begin{frame}{Non-Interpretable Latent Representations}
 	\begin{itemize}
 		\item Neural networks can model arbitrarily complex functions
-        \item The initial set of parameters are set randomly
-        \item The learned parameters usually do not demonstrate a visible pattern.
+		\item The initial set of parameters are set randomly
+		\item The learned parameters usually do not demonstrate a visible pattern.
 	\end{itemize}
 
-    \centering
-    \begin{figure}[ht]
+	\centering
+	\begin{figure}[ht]
 		\includegraphics[width=0.6\linewidth]{uninterpretable-weights}
 	\end{figure}
-    
-    \imgsrc{\url{https://ml4a.github.io/ml4a/looking_inside_neural_nets/}}
+	\imgsrc{\url{https://ml4a.github.io/ml4a/looking_inside_neural_nets}}
 \end{frame}
 
 \begin{frame}{Problem Statement}
@@ -67,8 +68,7 @@
 	\begin{figure}[ht]
 		\includegraphics[width=\linewidth]{dae-structure}
 	\end{figure}
-    
-    \imgsrc{\url{http://mlexplained.com/2017/12/28/an-intuitive-explanation-of-variational-autoencoders-vaes-part-1}}
+	\imgsrc{\url{http://mlexplained.com/2017/12/28/an-intuitive-explanation-of-variational-autoencoders-vaes-part-1}}
 \end{frame}
 
 \begin{frame}{Variational Autoencoding}
@@ -76,15 +76,15 @@
 	\begin{figure}[ht]
 		\includegraphics[width=\linewidth]{vae-structure}
 	\end{figure}
-
-    \imgsrc{\url{http://mlexplained.com/2017/12/28/an-intuitive-explanation-of-variational-autoencoders-vaes-part-1}}
+	\imgsrc{\url{http://mlexplained.com/2017/12/28/an-intuitive-explanation-of-variational-autoencoders-vaes-part-1}}
 \end{frame}
 
 \begin{frame}{Sequence Autoencoding}
 	\centering
-	\input{images/sequence-autoencoder.tex}
-
-	\imgsrc{\cite{srivastava2016unsupervised}}
+	\begin{figure}[ht]
+		\input{images/sequence-autoencoder.tex}
+	\end{figure}
+	\imgsrc{\citet{srivastava2015unsupervised}}
 \end{frame}
 
 \begin{frame}{Multi-Task Learning}
@@ -92,10 +92,22 @@
 \end{frame}
 
 \begin{frame}{Adversarial Learning}
+	Specialized case of multi-task learning to provide a negative signal as a regularizer to a generative network.
 
+	\centering
+	\begin{figure}[ht]
+		\includegraphics[width=0.8\textwidth]{images/gans}
+	\end{figure}
+	\imgsrc{\url{https://deeplearning4j.org/generative-adversarial-network}}
 \end{frame}
 
 \begin{frame}{Style Transfer}
+	\centering
+	\begin{figure}[ht]
+		\includegraphics[width=\textwidth]{images/style-transfer-vision}
+		\caption{Visual Style Transfer: (a) Content, (b) Style and (c) Synthesized Images}
+	\end{figure}
+	\imgsrc{\url{https://github.com/fzliu/style-transfer}}
 \end{frame}
 
 \begin{frame}{Style and Content in Language}
@@ -108,32 +120,64 @@
 
 \section{Approach}
 
+\begin{frame}{Sequence Autoencoder}
+	\centering
+	\begin{figure}[ht]
+		\includegraphics[width=\textwidth]{images/overview-training-1}
+	\end{figure}
+\end{frame}
+
 \begin{frame}{Sequence Autoencoder - Deterministic}
 	\textbf{Minimize the negative log-likelihood} of each predicted word, given the previous words.
 	\begin{equation}
-		P(x_1, x_2 \cdots x_T) = \prod_{i=1}^T P(x_i | x_1, x_2 \cdots, x_{i-1})
+		\loss{rec} = \prod_{t=1}^T P(x_t | [s_t;c_t], x_1, x_2 \cdots, x_{t-1})
 	\end{equation}
-	where $x_1, x_2 \cdots x_t$ are the features for each word. We typically use dense word embeddings \citep{mikolov2013distributed,pennington2014glove} for this.
+	where $x_1, x_2 \cdots$ are the features for each word \citep{mikolov2013distributed,pennington2014glove}, and $s_t$, $c_t$ are the hidden style and content state at time-step $t$, .
 
 	Trained using a \textbf{sequence cross-entropy loss}, we use the average cross-entropy per time-step to train the model.
 	\begin{equation}
-		\mathcal{H}_{x'} (x) := - \sum_{i}^V x_{i}' \log (x_i)
+		\mathcal{H}_{x'} (x) = - \sum_{i}^V x_{i}' \log (x_i)
 	\end{equation}
 	where $V$ is the size of the vocabulary, $x'$ and $x$ are the true and predicted distributions respectively.
+\end{frame}
+
+\begin{frame}{Sequence Autoencoder - Variational}
+\end{frame}
+
+\begin{frame}{Multi-Task Style Classifier}
+	\centering
+	\begin{figure}[ht]
+		\includegraphics[width=\textwidth]{images/overview-training-2}
+	\end{figure}
 \end{frame}
 
 \begin{frame}{Multi-Task Style Classifier}
 	Given a set of pairs of features $x$ and labels $y$ in pairs $(x_n, y_n)$, we train a classifier that minimizes the negative log-likelihood of the predicted softmax distribution over the predicted labels.
 	\begin{equation}
-		\mathcal{H}_{y'} (y) := - \sum_{i}^K y_{i}' \log (y_i)
+		\mathcal{H}_{y'} (y) = - \sum_{i}^K y_{i}' \log (y_i)
 	\end{equation}
 	where $K$ is the total number of classes.
 \end{frame}
 
 \begin{frame}{Style Discriminator}
+	\centering
+	\begin{figure}[ht]
+		\includegraphics[width=\textwidth]{images/overview-training-3}
+	\end{figure}
 \end{frame}
 
 \begin{frame}{Content Discriminator}
+	\centering
+	\begin{figure}[ht]
+		\includegraphics[width=\textwidth]{images/overview-training-4}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Complete Model}
+	\centering
+	\begin{figure}[ht]
+		\includegraphics[width=\textwidth]{images/overview-training-all}
+	\end{figure}
 \end{frame}
 
 % 
