@@ -1,6 +1,7 @@
 \documentclass[aspectratio=169]{beamer}
 
 \usepackage{natbib}
+\usepackage{multirow}
 
 \usetheme{metropolis}
 
@@ -15,7 +16,11 @@
 
 % Custom commands
 \newcommand{\imgsrc}[1]{\tiny{Source: #1}}
-\newcommand{\loss}[1]{\mathcal{L}_{#1}}
+\newcommand{\loss}[1]{\mathcal{L}_{\text{#1}}}
+\newcommand{\weight}[1]{\lambda_{\text{#1}}}
+\newcommand{\param}[1]{\theta_{\text{#1}}}
+\newcommand{\tabh}[1]{\multicolumn{1}{c|}{\textbf{#1}}}
+\newcommand{\tabc}[2]{\multicolumn{1}{|c|}{\multirow{#1}{*}{\textbf{#2}}}}
 
 % Title Slide
 \title{
@@ -89,6 +94,13 @@
 
 \begin{frame}{Multi-Task Learning}
 	Augmenting the holistic objective with an auxiliary objective to improve the learned representations.
+
+	Multi-task losses are used in previous work for:
+	\begin{itemize}
+		\item Sequence-to-sequence learning \citep{luong2015multi}
+		\item Sentence representation learning \citep{jernite2017discourse}
+		\item Sentiment analysis \citep{balikas2017multitask}
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{Adversarial Learning}
@@ -105,15 +117,88 @@
 	\centering
 	\begin{figure}[ht]
 		\includegraphics[width=\textwidth]{images/style-transfer-vision}
-		\caption{Visual Style Transfer: (a) Content, (b) Style and (c) Synthesized Images}
 	\end{figure}
+	Visual Style Transfer: (a) Content, (b) Style and (c) Synthesized Images
+
 	\imgsrc{\url{https://github.com/fzliu/style-transfer}}
 \end{frame}
 
 \begin{frame}{Style and Content in Language}
+	\centering
+	\begin{columns}[T]
+		\begin{column}{.3\textwidth}
+			\centering
+			\begin{tabular}{ c c }
+				I love this movie & $\rightarrow$ \\
+				I hate this movie & $\rightarrow$ \\
+			\end{tabular} \\
+			\vspace{1.8cm}
+			{\color{white} \begin{tabular}{ c c }
+					I love this movie & $\rightarrow$ \\
+					I hate this movie & $\rightarrow$ \\
+				\end{tabular}}
+		\end{column}
+		\hfill
+		\begin{column}{.6\textwidth}
+			\centering
+			\begin{tabular}{ | c | c | c | c | }
+				\hline
+				$0.21$ & $0.32$ & $0.74$ & $0.43$ \\
+				\hline
+				\hline
+				$0.45$ & $0.78$ & $0.97$ & $0.17$ \\
+				\hline
+			\end{tabular}
+			{\color{white}{\Huge$$\Downarrow$$}
+			\begin{tabular}{ | c | c | c | c | }
+				\hline
+				$0.68$ & $0.12$ & $0.33$ & $1.00$ \\
+				\hline
+				\hline
+				$0.68$ & $0.12$ & $0.33$ & $0.00$ \\
+				\hline
+			\end{tabular}}
+		\end{column}
+	\end{columns}
 \end{frame}
 
-\begin{frame}{Sequence Transduction}
+\begin{frame}{Style and Content in Language}
+	\centering
+	\begin{columns}[T]
+		\begin{column}{.3\textwidth}
+			\centering
+			\begin{tabular}{ c c }
+				I love this movie & $\rightarrow$ \\
+				I hate this movie & $\rightarrow$ \\
+			\end{tabular}\\
+			\vspace{1.8cm}
+			\begin{tabular}{ c c }
+				I love this movie & $\rightarrow$ \\
+				I hate this movie & $\rightarrow$ \\
+			\end{tabular}
+		\end{column}
+		\hfill
+		\begin{column}{.6\textwidth}
+			\centering
+			\begin{tabular}{ | c | c | c | c | }
+				\hline
+				$0.21$ & $0.32$ & $0.74$ & $0.43$ \\
+				\hline
+				\hline
+				$0.45$ & $0.78$ & $0.97$ & $0.17$ \\
+				\hline
+			\end{tabular}
+			{\Huge$$\Downarrow$$}
+			\begin{tabular}{ | c | c | c | c | }
+				\hline
+				$0.68$ & $0.12$ & $0.33$ & {\color{red}$1.00$} \\
+				\hline
+				\hline
+				$0.68$ & $0.12$ & $0.33$ & {\color{red}$0.00$} \\
+				\hline
+			\end{tabular}
+		\end{column}
+	\end{columns}
 \end{frame}
 
 % 
@@ -129,19 +214,27 @@
 
 \begin{frame}{Sequence Autoencoder - Deterministic}
 	\textbf{Minimize the negative log-likelihood} of each predicted word, given the previous words.
-	\begin{equation}
-		\loss{rec} = \prod_{t=1}^T P(x_t | [s_t;c_t], x_1, x_2 \cdots, x_{t-1})
+	\begin{equation} \label{eqn:dae-rec}
+		\loss{rec}(\param{E},\param{D}; x) = - \sum_{t=1}^T \log p(x_t | h_t, x_1, x_2 \cdots, x_{t-1})
 	\end{equation}
-	where $x_1, x_2 \cdots$ are the features for each word \citep{mikolov2013distributed,pennington2014glove}, and $s_t$, $c_t$ are the hidden style and content state at time-step $t$, .
+	where $x_1, x_2 \cdots$ are the features for each word \citep{mikolov2013distributed,pennington2014glove}, and $h_t = [s_t; c_t]$ is the final hidden state of the encoder.
 
 	Trained using a \textbf{sequence cross-entropy loss}, we use the average cross-entropy per time-step to train the model.
-	\begin{equation}
+	\begin{equation*}
 		\mathcal{H}_{x'} (x) = - \sum_{i}^V x_{i}' \log (x_i)
-	\end{equation}
+	\end{equation*}
 	where $V$ is the size of the vocabulary, $x'$ and $x$ are the true and predicted distributions respectively.
 \end{frame}
 
 \begin{frame}{Sequence Autoencoder - Variational}
+	The probabilistic sampling and KL divergence losses are applied for both the style space $s$ and the content space $c$, separately. The weights applied to each KL divergence loss are tuned independently as a hyperparameter.
+
+	\begin{align} \label{eqn:vae-rec}
+		\loss{rec}(\param{E},\param{D}; x) =
+		 & - \mathbb{E}_{q_{E}(s|x) q_{E}(c|x)} [\log p_D(x|s,c)] \nonumber \\
+		 & + \weight{skl} KL(q_{E}(s|x)||p(z))                    \nonumber \\
+		 & + \weight{ckl} KL(q_{E}(c|x)||p(z))
+	\end{align}
 \end{frame}
 
 \begin{frame}{Multi-Task Style Classifier}
@@ -152,11 +245,12 @@
 \end{frame}
 
 \begin{frame}{Multi-Task Style Classifier}
-	Given a set of pairs of features $x$ and labels $y$ in pairs $(x_n, y_n)$, we train a classifier that minimizes the negative log-likelihood of the predicted softmax distribution over the predicted labels.
-	\begin{equation}
-		\mathcal{H}_{y'} (y) = - \sum_{i}^K y_{i}' \log (y_i)
+	We use a simple multi-layer perceptron (MLP) followed by a softmax distribution over the possible labels
+
+	\begin{equation} \label{eqn:multi-task-loss}
+		\loss{mult}(\param{E};\param{mult}) = - \mathbb{E} [\log p(y|s;\param{mult})]
 	\end{equation}
-	where $K$ is the total number of classes.
+	where $\param{mult}$ are the classifier's parameters for multi-task learning, and $y$ is the true label distribution.
 \end{frame}
 
 \begin{frame}{Style Discriminator}
@@ -166,11 +260,40 @@
 	\end{figure}
 \end{frame}
 
+\begin{frame}{Style Discriminator}
+	\textbf{Discriminator Loss:}
+	Given a set of pairs of features $x$ and labels $y$ in pairs $(x_n, y_n)$, we train a classifier that minimizes the negative log-likelihood of the predicted softmax distribution over the predicted labels.
+	\begin{equation}
+		\loss{dis}(\param{dis}) = - \mathbb{E} [\log p(y|c;\param{dis})]
+	\end{equation}
+	where $K$ is the total number of classes.
+
+	\textbf{Adversarial Loss:}
+	The adversarial loss applied to the autoencoder is the Shannon entropy of the predicted distribution.
+	\begin{equation}
+		\loss{adv}(\param{E}) = - \mathcal{H}(p_\text{dis}(y|c))
+	\end{equation}
+\end{frame}
+
 \begin{frame}{Content Discriminator}
 	\centering
 	\begin{figure}[ht]
 		\includegraphics[width=\textwidth]{images/overview-training-4}
 	\end{figure}
+\end{frame}
+
+\begin{frame}{Content Discriminator}
+	\textbf{Discriminator Loss:}
+	Given the corpus of sentences, and their bag-of-words representations, we train a bag-of-words classifier that minimizes the negative log-likelihood of the predicted softmax distribution over the predicted vocabulary.
+	\begin{equation} \label{eqn:bow-disc-loss}
+		\loss{bow}(\param{bow}) = - \mathbb{E} [\log p(b|c;\param{bow})]
+	\end{equation}
+
+	\textbf{Adversarial Loss:}
+	The adversarial loss applied to the autoencoder is the Shannon entropy of the predicted distribution.
+	\begin{equation}
+		\loss{badv}(\param{E}) = - \mathcal{H}(p_\text{bow}(y|c))
+	\end{equation}
 \end{frame}
 
 \begin{frame}{Complete Model}
@@ -180,30 +303,87 @@
 	\end{figure}
 \end{frame}
 
-% 
-
-\section{Tasks and Datasets}
-
-\begin{frame}{Yelp Service Reviews}
+\begin{frame}{Complete Model}
+	\begin{align*}
+		\loss{ovr} =
+		 & \loss{rec}(\param{E},\param{D}) + \weight{mult} \loss{mult} (\param{E},\param{mult}) \\
+		 & - \weight{adv} \loss{adv}(\param{E}) - \weight{badv} \loss{badv}(\param{E})
+	\end{align*}
 \end{frame}
 
-\begin{frame}{Amazon Product Reviews}
-\end{frame}
-
 % 
+
+\section{Datasets}
+
+\begin{frame}{Datasets}
+	\begin{columns}[T] % align columns
+		\begin{column}{.48\textwidth}
+			\Large
+			\textbf{Yelp Service Reviews:}
+			\begin{itemize}
+				\item Train / Validation / Test = $444101$ / $126670$ / $63483$
+				\item Max Sentence Length $= 15$
+				\item Vocabulary Size $\approx 9200$
+			\end{itemize}
+		\end{column}
+		\hfill
+		\begin{column}{.48\textwidth}
+			\Large
+			\textbf{Amazon Product Reviews:}
+			\begin{itemize}
+				\item Train / Validation / Test = $559142$ / $2000$ / $2000$
+				\item Max Sentence Length $= 20$
+				\item Vocabulary Size $\approx 58000$
+			\end{itemize}
+		\end{column}
+	\end{columns}
+
+\end{frame}
 
 \section{Evaluation Metrics}
 
 \begin{frame}{Style Transfer Strength}
+
+	The style transfer strength is the ratio of sentences successfully transferred to the target style, to the total number of test sentences, as predicted by a pre-trained CNN text classifier \citep{kim2014convolutional}.
+
+	It is given by the following equation,
+	\begin{equation*}
+		\frac{\sum_{i=1}^{N}{(1 | y_i = y^*)}}{N}
+	\end{equation*}
+	where $N$ is the total number of generated sentences, $y*$ is the style attribute we wish to transfer, and $y_{1, 2 \cdots n}$ are the actual attributes as predicted by the pre-trained classifier.
 \end{frame}
 
 \begin{frame}{Content Preservation}
+	Let $W$ be the set of word embeddings in any sentence $s$.
+
+	Then the cosine similarity between two sentences $s_1$ and $s_2$ is obtained by
+	\begin{align*}
+		\text{emb} =    & [min(W);max(W);mean(W)]              \\
+		\text{cossim} = & 1 - \cos(\text{emb}_1, \text{emb}_2)
+	\end{align*}
+	where $\text{emb}_1$ and $\text{emb}_2$ are the sentence embeddings for $s_1$ and $s_2$ respectively.
+
+	The mean cosine similarity of all the sentences in the test dataset is reported as the content preservation.
 \end{frame}
 
 \begin{frame}{Word Overlap}
+	Given a source sentence $x$ and an attribute style transferred sentence $y$, let $w_x$ and $w_y$ be the set of unique words present in $x$ and $y$ respectively.
+
+	Then, the word overlap score can be calculated using
+	\begin{equation*}
+		\frac{count(w_x \cap w_y)}{count(w_x \cup w_y)}
+	\end{equation*}
+	which is simply a normalized measure of overlapping unigrams in the source and target.
 \end{frame}
 
 \begin{frame}{Language Fluency}
+	We use a trigram based Kneser–Ney Smoothed language model \citep{kneser1995improved} as a quantifiable and automated scoring metric by which to assess the quality of generated sentences.
+
+	\begin{equation*}
+		\sum_{t=1}^T \log p(x_t | x_{t-1}, x_{t-2})
+	\end{equation*}
+
+	The log-likelihood is reported as a measure of language fluency.
 \end{frame}
 
 % 
@@ -211,15 +391,71 @@
 \section{Results and Analysis}
 
 \begin{frame}{Latent Space Classification}
+	\begin{table}[ht]
+		\centering
+		\begin{tabular}{| l | r | r |}
+			\hline
+			                                & \tabh{DAE}                  & \tabh{VAE} \\
+			\hline \hline
+			Random/Majority guess           & \multicolumn{2}{c|}{0.6018}              \\ \hline \hline
+			Content latent space  ($c$)     & 0.6137                      & 0.6567     \\ \hline
+			Style latent space ($s$)        & 0.7927                      & 0.7911     \\ \hline
+			Complete latent space ($[s;c]$) & 0.7918                      & 0.7918     \\
+			\hline
+		\end{tabular}
+		\caption{Results - Style Classification Accuracy}
+		\label{tab:latent-space-classification}
+	\end{table}
+
 \end{frame}
 
 \begin{frame}{Latent Space t-SNE plots}
 \end{frame}
 
 \begin{frame}{Style Transfer Results - Yelp}
+	\begin{table}[ht]
+		\centering
+		\begin{tabular}{| l | r | r | r | r |}
+			\hline
+			\tabc{2}{Model}                       & \tabh{Transfer} & \tabh{Content}      & \tabh{Word}    & \tabh{Language} \\
+			                                      & \tabh{Strength} & \tabh{Preservation} & \tabh{Overlap} & \tabh{Fluency}  \\
+			\hline
+			\hline
+			Cross-Alignment \citep{shen2017style} & 0.8087          & 0.8920              & 0.2087         & -23.3886        \\
+			\hline
+			Style Embedding \citep{fu2017style}   & 0.1819          & 0.9586              & 0.6661         & -16.1711        \\
+			\hline
+			Ours (DAE)                            & 0.8425          & 0.8924              & 0.2552         & -16.4808        \\
+			\hline
+			Ours (VAE)                            & 0.8903          & 0.8824              & 0.2105         & -14.4099        \\
+			\hline
+		\end{tabular}
+		\caption{Results - Yelp Dataset Sentiment Transfer}
+		\label{tab:comparison-previous}
+	\end{table}
 \end{frame}
 
 \begin{frame}{Style Transfer Results - Amazon}
+	\begin{table}[ht]
+		\centering
+		\begin{tabular}{| l | r | r | r | r |}
+			\hline
+			\tabc{2}{Model}                       & \tabh{Transfer} & \tabh{Content}      & \tabh{Word}    & \tabh{Language} \\
+			                                      & \tabh{Strength} & \tabh{Preservation} & \tabh{Overlap} & \tabh{Fluency}  \\
+			\hline
+			\hline
+			Cross-Alignment \citep{shen2017style} & 0.6063          & 0.8933              & 0.0241         & -26.3093        \\
+			\hline
+			Style Embedding \citep{fu2017style}   & 0.4165          & 0.9332              & 0.3588         & -28.1346        \\
+			\hline
+			Ours (DAE)                            & 0.7032          & 0.9178              & 0.1305         & -32.4184        \\
+			\hline
+			Ours (VAE)                            & 0.7259          & 0.9090              & 0.0814         & -28.4953        \\
+			\hline
+		\end{tabular}
+		\caption{Results - Amazon Dataset Sentiment Transfer}
+		\label{tab:comparison-previous-ama}
+	\end{table}
 \end{frame}
 
 % 
@@ -246,8 +482,8 @@
 \end{frame}
 
 \begin{frame}[allowframebreaks]
+	\tiny\bibliography{presentation}
 	\bibliographystyle{unsrtnat}
-	\bibliography{presentation}
 \end{frame}
 
 \begin{frame}
