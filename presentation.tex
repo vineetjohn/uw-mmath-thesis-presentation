@@ -2,11 +2,22 @@
 
 \usepackage{natbib}
 
-\usetheme{metropolis}           % Use metropolis theme
+\hypersetup{
+    pdfauthor={Vineet John}, 
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=red,
+    filecolor=magenta,
+    urlcolor=cyan
+}
+
+\newcommand{\imgsrc}[1]{\tiny{Source: #1}}
+
+\usetheme{metropolis}
 \title{
-    Disentangled Representation Learning for \\
-    Stylistic Variation in Neural Language Models}
-\date{\today}
+	Disentangled Representation Learning\\
+	for Linguistic Style Transfer}
+\date{}
 \author{Vineet John}
 \institute{University of Waterloo}
 
@@ -19,13 +30,27 @@
 \section{Motivation}
 
 \begin{frame}{Universal Function Approximators}
+	\centering
 	\begin{figure}[ht]
-		\centering
 		\includegraphics[width=\linewidth]{mlp-network}
 	\end{figure}
+
+    \imgsrc{\url{http://corochann.com/mnist-training-with-multi-layer-perceptron-1149.html}}
 \end{frame}
 
 \begin{frame}{Non-Interpretable Latent Representations}
+	\begin{itemize}
+		\item Neural networks can model arbitrarily complex functions
+        \item The initial set of parameters are set randomly
+        \item The learned parameters usually do not demonstrate a visible pattern.
+	\end{itemize}
+
+    \centering
+    \begin{figure}[ht]
+		\includegraphics[width=0.6\linewidth]{uninterpretable-weights}
+	\end{figure}
+    
+    \imgsrc{\url{https://ml4a.github.io/ml4a/looking_inside_neural_nets/}}
 \end{frame}
 
 \begin{frame}{Problem Statement}
@@ -37,27 +62,37 @@
 
 \section{Background}
 
+\begin{frame}{Autoencoding}
+	\centering
+	\begin{figure}[ht]
+		\includegraphics[width=\linewidth]{dae-structure}
+	\end{figure}
+    
+    \imgsrc{\url{http://mlexplained.com/2017/12/28/an-intuitive-explanation-of-variational-autoencoders-vaes-part-1}}
+\end{frame}
+
+\begin{frame}{Variational Autoencoding}
+	\centering
+	\begin{figure}[ht]
+		\includegraphics[width=\linewidth]{vae-structure}
+	\end{figure}
+
+    \imgsrc{\url{http://mlexplained.com/2017/12/28/an-intuitive-explanation-of-variational-autoencoders-vaes-part-1}}
+\end{frame}
+
 \begin{frame}{Sequence Autoencoding}
 	\centering
 	\input{images/sequence-autoencoder.tex}
 
-	\tiny{Source: \cite{srivastava2015unsupervised}}
-\end{frame}
-
-\begin{frame}{Sequence Autoencoding}
-    \textbf{Text Reconstruction}
-    Predict next most likely word at each time step
-    \begin{equation}
-        P(x_1, x_2 \cdots x_t) = \prod_{i=1}^t P(x_i | x_1, \cdots, x_{i-1})
-    \end{equation}
-
-    Minimize the negative log-likelihood of each word, given the previous words
+	\imgsrc{\cite{srivastava2016unsupervised}}
 \end{frame}
 
 \begin{frame}{Multi-Task Learning}
+	Augmenting the holistic objective with an auxiliary objective to improve the learned representations.
 \end{frame}
 
 \begin{frame}{Adversarial Learning}
+
 \end{frame}
 
 \begin{frame}{Style Transfer}
@@ -74,13 +109,25 @@
 \section{Approach}
 
 \begin{frame}{Sequence Autoencoder - Deterministic}
-\end{frame}
+	\textbf{Minimize the negative log-likelihood} of each predicted word, given the previous words.
+	\begin{equation}
+		P(x_1, x_2 \cdots x_T) = \prod_{i=1}^T P(x_i | x_1, x_2 \cdots, x_{i-1})
+	\end{equation}
+	where $x_1, x_2 \cdots x_t$ are the features for each word. We typically use dense word embeddings \citep{mikolov2013distributed,pennington2014glove} for this.
 
-\begin{frame}{Sequence Autoencoder - Variational}
-	\citet{kingma2013auto}
+	Trained using a \textbf{sequence cross-entropy loss}, we use the average cross-entropy per time-step to train the model.
+	\begin{equation}
+		\mathcal{H}_{x'} (x) := - \sum_{i}^V x_{i}' \log (x_i)
+	\end{equation}
+	where $V$ is the size of the vocabulary, $x'$ and $x$ are the true and predicted distributions respectively.
 \end{frame}
 
 \begin{frame}{Multi-Task Style Classifier}
+	Given a set of pairs of features $x$ and labels $y$ in pairs $(x_n, y_n)$, we train a classifier that minimizes the negative log-likelihood of the predicted softmax distribution over the predicted labels.
+	\begin{equation}
+		\mathcal{H}_{y'} (y) := - \sum_{i}^K y_{i}' \log (y_i)
+	\end{equation}
+	where $K$ is the total number of classes.
 \end{frame}
 
 \begin{frame}{Style Discriminator}
