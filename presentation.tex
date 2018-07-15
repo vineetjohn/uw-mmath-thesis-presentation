@@ -2,6 +2,7 @@
 
 \usepackage{natbib}
 \usepackage{multirow}
+\usepackage[linesnumbered,lined]{algorithm2e}
 
 \usetheme{metropolis}
 
@@ -296,19 +297,41 @@
 	\end{equation}
 \end{frame}
 
-\begin{frame}{Complete Model}
+\begin{frame}{Model Training}
 	\centering
 	\begin{figure}[ht]
 		\includegraphics[width=\textwidth]{images/overview-training-all}
 	\end{figure}
 \end{frame}
 
-\begin{frame}{Complete Model}
+\begin{frame}{Model Training}
+	\textbf{Overall Autoencoder Model Loss:}
 	\begin{align*}
 		\loss{ovr} =
 		 & \loss{rec}(\param{E},\param{D}) + \weight{mult} \loss{mult} (\param{E},\param{mult}) \\
 		 & - \weight{adv} \loss{adv}(\param{E}) - \weight{badv} \loss{badv}(\param{E})
 	\end{align*}
+
+	\textbf{Training Algorithm:}
+
+	\centering
+	\begin{minipage}{.7\linewidth}
+
+		\begin{algorithm}[H]
+			\While{epochs remaining}{
+				minimize $\loss{dis}$ w.r.t. $\param{dis}$\;
+				minimize $\loss{bow}$ w.r.t. $\param{bow}$\;
+				minimize $\loss{ovr}$ w.r.t. $\param{E}, \param{D}, \param{mult}$\;
+			}
+		\end{algorithm}
+	\end{minipage}
+\end{frame}
+
+\begin{frame}{Model Inference}
+	\centering
+	\begin{figure}[ht]
+		\includegraphics[width=\textwidth]{images/overview-inference}
+	\end{figure}
 \end{frame}
 
 % 
@@ -410,6 +433,21 @@
 \end{frame}
 
 \begin{frame}{Latent Space t-SNE plots}
+	\centering
+	\textbf{Deterministic Autoencoder}
+
+	\begin{figure}[ht]
+		\includegraphics[width=\textwidth]{images/dae-latent-spaces}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Latent Space t-SNE plots}
+	\centering
+	\textbf{Variational Autoencoder}
+
+	\begin{figure}[ht]
+		\includegraphics[width=\textwidth]{images/vae-latent-spaces}
+	\end{figure}
 \end{frame}
 
 \begin{frame}{Style Transfer Results - Yelp}
