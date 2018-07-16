@@ -5,6 +5,7 @@
 \usepackage[linesnumbered,lined]{algorithm2e}
 
 \usetheme{metropolis}
+\setbeamercolor{background canvas}{bg=white}
 
 \hypersetup{
     pdfauthor={Vineet John}, 
@@ -496,6 +497,50 @@
 	\end{table}
 \end{frame}
 
+\begin{frame}{Examples of Style Transfer}
+	\centering
+	\begin{table}[ht]
+		\centering
+		\begin{tabular}{| p{0.3\linewidth} | p{0.3\linewidth} | p{0.3\linewidth} |}
+			\hline
+			\tabc{2}{Original (Positive)}                    & \tabh{DAE Transferred}                                & \tabh{VAE Transferred}                             \\
+			                                                 & \tabh{(Negative)}                                     & \tabh{(Negative)}                                  \\
+			\hline
+			\hline
+			i would recommend a visit here                   & i would not recommend this place again                & i would not recommend this place for my experience \\
+			\hline
+			the restaurant itself is romantic and quiet      & the restaurant itself is soooo quiet                  & the restaurant itself was dirty                    \\
+			\hline
+			the food is very very amazing like beef and fish & the food is very horrible i have ever had mostly fish & the food is very bland and just not fresh          \\
+			\hline
+			we will definitely come back here                & we will not come back here again                      & we will never come back here                       \\
+			\hline
+		\end{tabular}
+	\end{table}
+\end{frame}
+
+\begin{frame}{Examples of Style Transfer}
+	\centering
+	\begin{table}[ht]
+		\centering
+		\begin{tabular}{| p{0.3\linewidth} | p{0.3\linewidth} | p{0.3\linewidth} |}
+			\hline
+			\tabc{2}{Original (Negative)}                          & \tabh{DAE Transferred}                                & \tabh{VAE Transferred}                                      \\
+			                                                       & \tabh{(Positive)}                                     & \tabh{(Positive)}                                           \\
+			\hline
+			\hline
+			crap fries hard hamburger buns burger tasted like crap & cheap and yummy sandwiches really something different & yummy hamburgers and blue cheese bagels are classic italian \\
+			\hline
+			oh and terrible tea                                    & oh and awesome tea                                    & oh and great tea                                            \\
+			\hline
+			the interior is old and generally falling apart        & the interior is clean and orderly as entertaining     & the interior is old and noble                               \\
+			\hline
+			the crust was kinda gooey like                         & the crust is kinda traditional                        & the crust is soooooo worth it                               \\
+			\hline
+		\end{tabular}
+	\end{table}
+\end{frame}
+
 % 
 
 \section{Related Work}
@@ -529,6 +574,12 @@
 \section{Summary}
 
 \begin{frame}{Summary}
+	\begin{itemize}
+		\item We describe auxiliary objectives that augment a vanilla autoencoder, including a dual-adversary setup containing a novel bag-of-words adversary.
+		\item Our model generalizes to multi-class problems without requiring multiple discriminators \citep{hu2017toward,shen2017style} and multiple decoders \citep{fu2017style}.
+		\item We show that the auxiliary objectives can separate latent variables for style and content, qualitatively and quantitatively.
+		\item We apply this method to style transfer tasks in language and achieve state-of-the-art performance, without any explicit style transfer objective.
+	\end{itemize}
 \end{frame}
 
 \begin{frame}[allowframebreaks]
