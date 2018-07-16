@@ -178,11 +178,11 @@
 \begin{frame}{Sequence Autoencoder - Deterministic}
 	\textbf{Minimize the negative log-likelihood} of each predicted word, given the previous words.
 	\begin{equation} \label{eqn:dae-rec}
-		\loss{rec}(\param{E},\param{D}; x) = - \sum_{t=1}^T \log p(x_t | h_t, x_1, x_2 \cdots, x_{t-1})
+		\loss{rec}(\param{E},\param{D}; x) = - \sum_{t=1}^T \log p(x_t | h_t, x_{t-1})
 	\end{equation}
-	where $x_1, x_2 \cdots$ are the features for each word \citep{mikolov2013distributed,pennington2014glove}, and $h_t = [s_t; c_t]$ is the final hidden state of the encoder.
+	where $h_0 = [s; c]$ is the final hidden state of the encoder.
 
-	Trained using a \textbf{sequence cross-entropy loss}, we use the average cross-entropy per time-step to train the model.
+	Trained using a \textbf{sequence cross-entropy loss}, i.e. the average cross-entropy per time-step.
 	\begin{equation*}
 		\mathcal{H}_{x'} (x) = - \sum_{i}^V x_{i}' \log (x_i)
 	\end{equation*}
@@ -211,9 +211,9 @@
 	We use a simple multi-layer perceptron (MLP) followed by a softmax distribution over the possible labels
 
 	\begin{equation} \label{eqn:multi-task-loss}
-		\loss{mult}(\param{E};\param{mult}) = - \mathbb{E} [\log p(y|s;\param{mult})]
+		\loss{mult}(\param{E};\param{mult}) = - \mathbb{E} [\log p(y'|s;\param{mult})]
 	\end{equation}
-	where $\param{mult}$ are the classifier's parameters for multi-task learning, and $y$ is the true label distribution.
+	where $\param{mult}$ are the classifier's parameters for multi-task learning, and $y'$ is the true label distribution.
 \end{frame}
 
 \begin{frame}{Style Discriminator}
@@ -227,14 +227,14 @@
 	\textbf{Discriminator Loss:}
 	Given a set of pairs of features $x$ and labels $y$ in pairs $(x_n, y_n)$, we train a classifier that minimizes the negative log-likelihood of the predicted softmax distribution over the predicted labels.
 	\begin{equation}
-		\loss{dis}(\param{dis}) = - \mathbb{E} [\log p(y|c;\param{dis})]
+		\loss{dis}(\param{dis}) = - \mathbb{E} [\log p(y'|c;\param{dis})]
 	\end{equation}
-	where $y$ is the true label distribution.
+	where $y'$ is the true label distribution.
 
 	\textbf{Adversarial Loss:}
-	The adversarial loss applied to the autoencoder is the Shannon entropy of the predicted distribution.
+	The adversarial loss that the autoencoder tries to maximize is the Shannon entropy of the predicted distribution $y$.
 	\begin{equation}
-		\loss{adv}(\param{E}) = - \mathcal{H}(p_\text{dis}(y|c))
+		\loss{adv}(\param{E}) = \mathcal{H}(p_\text{dis}(y|c))
 	\end{equation}
 \end{frame}
 
@@ -249,13 +249,13 @@
 	\textbf{Discriminator Loss:}
 	Given the corpus of sentences, and their bag-of-words representations, we train a bag-of-words classifier that minimizes the negative log-likelihood of the predicted softmax distribution over the predicted vocabulary.
 	\begin{equation} \label{eqn:bow-disc-loss}
-		\loss{bow}(\param{bow}) = - \mathbb{E} [\log p(b|c;\param{bow})]
+		\loss{bow}(\param{bow}) = - \mathbb{E} [\log p(b'|c;\param{bow})]
 	\end{equation}
 
 	\textbf{Adversarial Loss:}
-	The adversarial loss applied to the autoencoder is the Shannon entropy of the predicted distribution.
+	The adversarial loss that the autoencoder tries to maximize is the Shannon entropy of the predicted distribution $b$.
 	\begin{equation}
-		\loss{badv}(\param{E}) = - \mathcal{H}(p_\text{bow}(b|c))
+		\loss{badv}(\param{E}) = \mathcal{H}(p_\text{bow}(b|c))
 	\end{equation}
 \end{frame}
 
@@ -298,6 +298,8 @@
 
 % 
 
+\section{Experiments}
+
 \section{Datasets}
 
 \begin{frame}{Datasets}
@@ -305,6 +307,8 @@
 		\begin{column}{.48\textwidth}
 			\Large
 			\textbf{Yelp Service Reviews:}
+
+			\citep{shen2017style}
 			\begin{itemize}
 				\item Train / Validation / Test = $444101$ / $126670$ / $63483$
 				\item Max Sentence Length $= 15$
@@ -315,6 +319,8 @@
 		\begin{column}{.48\textwidth}
 			\Large
 			\textbf{Amazon Product Reviews:}
+
+			\citep{fu2017style}
 			\begin{itemize}
 				\item Train / Validation / Test = $559142$ / $2000$ / $2000$
 				\item Max Sentence Length $= 20$
@@ -393,6 +399,70 @@
 	\end{table}
 \end{frame}
 
+\begin{frame}{Latent Space t-SNE plots}
+	\centering
+	\textbf{Deterministic Autoencoder}
+
+	\begin{figure}[ht]
+		\includegraphics[width=\textwidth]{images/dae-latent-spaces}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Latent Space t-SNE plots}
+	\centering
+	\textbf{Variational Autoencoder}
+
+	\begin{figure}[ht]
+		\includegraphics[width=\textwidth]{images/vae-latent-spaces}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Style Transfer Results - Yelp}
+	\begin{table}[ht]
+		\centering
+		\begin{tabular}{| l | r | r | r | r |}
+			\hline
+			\tabc{2}{Model}       & \tabh{Transfer} & \tabh{Content}      & \tabh{Word}    & \tabh{Language} \\
+			                      & \tabh{Strength} & \tabh{Preservation} & \tabh{Overlap} & \tabh{Fluency}  \\
+			\hline
+			\hline
+			\citet{shen2017style} & 0.8087          & 0.8920              & 0.2087         & -23.3886        \\
+			\hline
+			\citet{fu2017style}   & 0.1819          & 0.9586              & 0.6661         & -16.1711        \\
+			\hline
+			Ours (DAE)            & 0.8425          & 0.8924              & 0.2552         & -16.4808        \\
+			\hline
+			Ours (VAE)            & 0.8903          & 0.8824              & 0.2105         & -14.4099        \\
+			\hline
+		\end{tabular}
+		\caption{Results - Yelp Dataset Sentiment Transfer}
+		\label{tab:comparison-previous}
+	\end{table}
+\end{frame}
+
+\begin{frame}{Style Transfer Results - Amazon}
+	\begin{table}[ht]
+		\centering
+		\begin{tabular}{| l | r | r | r | r |}
+			\hline
+			\tabc{2}{Model}       & \tabh{Transfer} & \tabh{Content}      & \tabh{Word}    & \tabh{Language} \\
+			                      & \tabh{Strength} & \tabh{Preservation} & \tabh{Overlap} & \tabh{Fluency}  \\
+			\hline
+			\hline
+			\citet{shen2017style} & 0.6063          & 0.8933              & 0.0241         & -26.3093        \\
+			\hline
+			\citet{fu2017style}   & 0.4165          & 0.9332              & 0.3588         & -28.1346        \\
+			\hline
+			Ours (DAE)            & 0.7032          & 0.9178              & 0.1305         & -32.4184        \\
+			\hline
+			Ours (VAE)            & 0.7259          & 0.9090              & 0.0814         & -28.4953        \\
+			\hline
+		\end{tabular}
+		\caption{Results - Amazon Dataset Sentiment Transfer}
+		\label{tab:comparison-previous-ama}
+	\end{table}
+\end{frame}
+
 \begin{frame}{Ablation Tests}
 	\begin{table}[ht]
 		\centering
@@ -421,70 +491,6 @@
 		\end{tabular}
 		\caption{Results - Ablation Tests}
 		\label{tab:ablation-results}
-	\end{table}
-\end{frame}
-
-\begin{frame}{Latent Space t-SNE plots}
-	\centering
-	\textbf{Deterministic Autoencoder}
-
-	\begin{figure}[ht]
-		\includegraphics[width=\textwidth]{images/dae-latent-spaces}
-	\end{figure}
-\end{frame}
-
-\begin{frame}{Latent Space t-SNE plots}
-	\centering
-	\textbf{Variational Autoencoder}
-
-	\begin{figure}[ht]
-		\includegraphics[width=\textwidth]{images/vae-latent-spaces}
-	\end{figure}
-\end{frame}
-
-\begin{frame}{Style Transfer Results - Yelp}
-	\begin{table}[ht]
-		\centering
-		\begin{tabular}{| l | r | r | r | r |}
-			\hline
-			\tabc{2}{Model}                       & \tabh{Transfer} & \tabh{Content}      & \tabh{Word}    & \tabh{Language} \\
-			                                      & \tabh{Strength} & \tabh{Preservation} & \tabh{Overlap} & \tabh{Fluency}  \\
-			\hline
-			\hline
-			Cross-Alignment \citep{shen2017style} & 0.8087          & 0.8920              & 0.2087         & -23.3886        \\
-			\hline
-			Style Embedding \citep{fu2017style}   & 0.1819          & 0.9586              & 0.6661         & -16.1711        \\
-			\hline
-			Ours (DAE)                            & 0.8425          & 0.8924              & 0.2552         & -16.4808        \\
-			\hline
-			Ours (VAE)                            & 0.8903          & 0.8824              & 0.2105         & -14.4099        \\
-			\hline
-		\end{tabular}
-		\caption{Results - Yelp Dataset Sentiment Transfer}
-		\label{tab:comparison-previous}
-	\end{table}
-\end{frame}
-
-\begin{frame}{Style Transfer Results - Amazon}
-	\begin{table}[ht]
-		\centering
-		\begin{tabular}{| l | r | r | r | r |}
-			\hline
-			\tabc{2}{Model}                       & \tabh{Transfer} & \tabh{Content}      & \tabh{Word}    & \tabh{Language} \\
-			                                      & \tabh{Strength} & \tabh{Preservation} & \tabh{Overlap} & \tabh{Fluency}  \\
-			\hline
-			\hline
-			Cross-Alignment \citep{shen2017style} & 0.6063          & 0.8933              & 0.0241         & -26.3093        \\
-			\hline
-			Style Embedding \citep{fu2017style}   & 0.4165          & 0.9332              & 0.3588         & -28.1346        \\
-			\hline
-			Ours (DAE)                            & 0.7032          & 0.9178              & 0.1305         & -32.4184        \\
-			\hline
-			Ours (VAE)                            & 0.7259          & 0.9090              & 0.0814         & -28.4953        \\
-			\hline
-		\end{tabular}
-		\caption{Results - Amazon Dataset Sentiment Transfer}
-		\label{tab:comparison-previous-ama}
 	\end{table}
 \end{frame}
 
