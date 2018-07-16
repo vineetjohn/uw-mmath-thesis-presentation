@@ -285,7 +285,7 @@
 	\begin{equation}
 		\loss{dis}(\param{dis}) = - \mathbb{E} [\log p(y|c;\param{dis})]
 	\end{equation}
-	where $K$ is the total number of classes.
+	where $y$ is the true label distribution.
 
 	\textbf{Adversarial Loss:}
 	The adversarial loss applied to the autoencoder is the Shannon entropy of the predicted distribution.
@@ -311,7 +311,7 @@
 	\textbf{Adversarial Loss:}
 	The adversarial loss applied to the autoencoder is the Shannon entropy of the predicted distribution.
 	\begin{equation}
-		\loss{badv}(\param{E}) = - \mathcal{H}(p_\text{bow}(y|c))
+		\loss{badv}(\param{E}) = - \mathcal{H}(p_\text{bow}(b|c))
 	\end{equation}
 \end{frame}
 
@@ -447,7 +447,37 @@
 		\caption{Results - Style Classification Accuracy}
 		\label{tab:latent-space-classification}
 	\end{table}
+\end{frame}
 
+\begin{frame}{Ablation Tests}
+	\begin{table}[ht]
+		\centering
+		\begin{tabular}{| l | r | r | r | r |}
+			\hline
+			\tabc{2}{Objectives}                                     & \tabh{Transfer} & \tabh{Content}      & \tabh{Word}     & \tabh{Language}   \\
+			                                                         & \tabh{Strength} & \tabh{Preservation} & \tabh{Overlap}  & \tabh{Fluency}    \\
+			\hline
+			\hline
+			$\loss{rec}$                                             & 0.1436          & \textbf{0.9154}     & \textbf{0.3288} & -14.2781          \\
+			\hline
+			$\loss{rec}$, $\loss{adv}$                               & 0.7274          & 0.8800              & 0.2037          & -14.1567          \\
+			\hline
+			$\loss{rec}$, $\loss{mult}$                              & 0.7894          & 0.8976              & 0.2589          & -14.5607          \\
+			\hline
+			$\loss{rec}$, $\loss{badv}$                              & 0.1677          & 0.9147              & 0.3282          & -14.4486          \\
+			\hline
+			$\loss{rec}$, $\loss{adv}$, $\loss{mult}$                & \textbf{0.8903} & 0.8824              & 0.2105          & -14.4099          \\
+			\hline
+			$\loss{rec}$, $\loss{adv}$, $\loss{badv}$                & 0.7491          & 0.8827              & 0.2022          & -14.3568          \\
+			\hline
+			$\loss{rec}$, $\loss{mult}$, $\loss{badv}$               & 0.7832          & 0.8958              & 0.2567          & -14.3373          \\
+			\hline
+			$\loss{rec}$, $\loss{adv}$, $\loss{mult}$, $\loss{badv}$ & 0.8846          & 0.8782              & 0.1970          & \textbf{-14.0479} \\
+			\hline
+		\end{tabular}
+		\caption{Results - Ablation Tests}
+		\label{tab:ablation-results}
+	\end{table}
 \end{frame}
 
 \begin{frame}{Latent Space t-SNE plots}
@@ -593,7 +623,7 @@
 \begin{frame}{Summary}
 	\begin{itemize}
 		\item We describe auxiliary objectives that augment a vanilla autoencoder, including a dual-adversary setup containing a novel bag-of-words adversary.
-		\item Our model generalizes to multi-class problems without requiring multiple discriminators \citep{hu2017toward,shen2017style} and multiple decoders \citep{fu2017style}.
+		\item Our model generalizes to multi-class problems without requiring multiple discriminators \citep{hu2017toward,shen2017style} and multiple decoders \citep{fu2017style,prabhumoye2018style}.
 		\item We show that the auxiliary objectives can separate latent variables for style and content, qualitatively and quantitatively.
 		\item We apply this method to style transfer tasks in language and achieve state-of-the-art performance, without any explicit style transfer objective.
 	\end{itemize}
