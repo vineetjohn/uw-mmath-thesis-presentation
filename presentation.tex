@@ -63,80 +63,27 @@
 
 \begin{frame}{Style and Content in Language}
 	\centering
-	\begin{columns}[T]
-		\begin{column}{.3\textwidth}
-			\centering
-			\begin{tabular}{ c c }
-				I love this movie & $\rightarrow$ \\
-				I hate this movie & $\rightarrow$ \\
-			\end{tabular} \\
-			\vspace{1.8cm}
-			{\color{white} \begin{tabular}{ c c }
-					I love this movie & $\rightarrow$ \\
-					I hate this movie & $\rightarrow$ \\
-				\end{tabular}}
-		\end{column}
-		\hfill
-		\begin{column}{.6\textwidth}
-			\centering
-			\begin{tabular}{ | c | c | c | c | }
-				\hline
-				$0.21$ & $0.32$ & $0.74$ & $0.43$ \\
-				\hline
-				\hline
-				$0.45$ & $0.78$ & $0.97$ & $0.17$ \\
-				\hline
-			\end{tabular}
-			{\color{white}{\Huge$$\Downarrow$$}
-			\begin{tabular}{ | c | c | c | c | }
-				\hline
-				$0.68$ & $0.12$ & $0.33$ & $1.00$ \\
-				\hline
-				\hline
-				$0.68$ & $0.12$ & $0.33$ & $0.00$ \\
-				\hline
-			\end{tabular}}
-		\end{column}
-	\end{columns}
-\end{frame}
-
-\begin{frame}{Style and Content in Language}
-	\centering
-	\begin{columns}[T]
-		\begin{column}{.3\textwidth}
-			\centering
-			\begin{tabular}{ c c }
-				I love this movie & $\rightarrow$ \\
-				I hate this movie & $\rightarrow$ \\
-			\end{tabular}\\
-			\vspace{1.8cm}
-			\begin{tabular}{ c c }
-				I love this movie & $\rightarrow$ \\
-				I hate this movie & $\rightarrow$ \\
-			\end{tabular}
-		\end{column}
-		\hfill
-		\begin{column}{.6\textwidth}
-			\centering
-			\begin{tabular}{ | c | c | c | c | }
-				\hline
-				$0.21$ & $0.32$ & $0.74$ & $0.43$ \\
-				\hline
-				\hline
-				$0.45$ & $0.78$ & $0.97$ & $0.17$ \\
-				\hline
-			\end{tabular}
-			{\Huge$$\Downarrow$$}
-			\begin{tabular}{ | c | c | c | c | }
-				\hline
-				$0.68$ & $0.12$ & $0.33$ & {\color{red}$1.00$} \\
-				\hline
-				\hline
-				$0.68$ & $0.12$ & $0.33$ & {\color{red}$0.00$} \\
-				\hline
-			\end{tabular}
-		\end{column}
-	\end{columns}
+	\LARGE
+	\begin{table}[ht]
+		\centering
+		\begin{tabular}{ l  c | c | c | c | c |}
+			\\
+			\cline{3-6}
+			I love this movie & $\rightarrow$ & $0.21$ & $0.32$ & $0.74$ & $0.43$ \\
+			\cline{3-6}
+			I hate this movie & $\rightarrow$ & $0.45$ & $0.78$ & $0.97$ & $0.17$ \\
+			\cline{3-6}
+		\end{tabular}
+		\pause
+		{\Huge$$\Downarrow$$}
+		\begin{tabular}{ l  c | c | c | c | c |}
+			\cline{3-6}
+			I love this movie & $\rightarrow$ & $0.68$ & $0.12$ & $0.33$ & {\color{red}$1.00$} \\
+			\cline{3-6}
+			I hate this movie & $\rightarrow$ & $0.68$ & $0.12$ & $0.33$ & {\color{red}$0.00$} \\
+			\cline{3-6}
+		\end{tabular}
+	\end{table}
 \end{frame}
 
 \begin{frame}{Style and Content in Language}
