@@ -49,8 +49,8 @@
 
 \begin{frame}{Non-Interpretable Latent Representations}
 	\begin{itemize}
-		\item Neural networks can model arbitrarily complex functions
-		\item The initial set of parameters are set randomly
+		\item Neural networks can model arbitrarily complex functions. $f(x) + \epsilon = f'(x)$
+		\item The initial set of parameters are set randomly.
 		\item The learned parameters usually do not demonstrate a visible pattern.
 	\end{itemize}
 
@@ -61,9 +61,27 @@
 	\imgsrc{\url{https://ml4a.github.io/ml4a/looking_inside_neural_nets}}
 \end{frame}
 
+\begin{frame}{Style and Content in Language}
+	The idea of style and content in language are vague and open to interpretation.
+
+	However, most researchers in the NLP community use discrete or continuous attributes in text like
+	\begin{itemize}
+		\item Sentiment \citep{hu2017toward,shen2017style,fu2017style}
+		\item Tense \citep{hu2017toward}
+		\item Publication Medium \citep{fu2017style}
+		\item Question Topic \citep{kim2017adversarially}
+		\item Political Slant \citep{prabhumoye2018style}
+	\end{itemize}
+\end{frame}
+
 \begin{frame}{Problem Statement}
 	\centering
-	\Huge{Generate plausible sentences in a user-defined style, while retaining the original content of the source sentences.}
+	\Huge{Disentangle the latent variables for \textbf{style} and \textbf{content} in language models, thereby learning interpretable sentence representations}
+\end{frame}
+
+\begin{frame}{Auxiliary Problem Statement}
+	\centering
+	\Huge{Generate \textbf{plausible sentences} in a user-defined style, while retaining the original content of the source sentences}
 \end{frame}
 
 % 
@@ -115,13 +133,12 @@
 	\imgsrc{\url{https://deeplearning4j.org/generative-adversarial-network}}
 \end{frame}
 
-\begin{frame}{Style Transfer}
+\begin{frame}{Visual Style Transfer}
 	\centering
+	(a) Content, (b) Style and (c) Synthesized Images
 	\begin{figure}[ht]
 		\includegraphics[width=\textwidth]{images/style-transfer-vision}
 	\end{figure}
-	Visual Style Transfer: (a) Content, (b) Style and (c) Synthesized Images
-
 	\imgsrc{\url{https://github.com/fzliu/style-transfer}}
 \end{frame}
 
