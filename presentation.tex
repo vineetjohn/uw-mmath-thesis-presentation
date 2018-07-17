@@ -135,7 +135,7 @@
 \end{frame}
 
 \begin{frame}{Multi-Task Learning}
-	Augmenting the holistic objective with an auxiliary objective to improve the learned representations.
+	Augments the holistic objective with an auxiliary objective to improve the learned representations.
 
 	Multi-task losses are used in previous work for:
 	\begin{itemize}
@@ -146,11 +146,9 @@
 \end{frame}
 
 \begin{frame}{Adversarial Learning}
-	Specialized case of multi-task learning to provide a negative signal as a regularizer to a generative network.
-
 	\centering
 	\begin{figure}[ht]
-		\includegraphics[width=0.8\textwidth]{images/gans}
+		\includegraphics[width=\textwidth]{images/gans}
 	\end{figure}
 	\imgsrc{\url{https://deeplearning4j.org/generative-adversarial-network}}
 \end{frame}
@@ -180,7 +178,7 @@
 	\begin{equation} \label{eqn:dae-rec}
 		\loss{rec}(\param{E},\param{D}; x) = - \sum_{t=1}^T \log p(x_t | h_t, x_{t-1})
 	\end{equation}
-	where $h_0 = [s; c]$ is the final hidden state of the encoder.
+	where $h_0 = [s; c]$ is the initial hidden state of the decoder.
 
 	Trained using a \textbf{sequence cross-entropy loss}, i.e. the average cross-entropy per time-step.
 	\begin{equation*}
