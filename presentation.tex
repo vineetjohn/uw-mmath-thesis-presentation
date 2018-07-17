@@ -247,13 +247,13 @@
 	\textbf{Discriminator Loss:}
 	Given the corpus of sentences, and their bag-of-words representations, we train a bag-of-words classifier that minimizes the negative log-likelihood of the predicted distribution over the vocabulary words.
 	\begin{equation} \label{eqn:bow-disc-loss}
-		\loss{bow}(\param{bow}) = - \mathbb{E} [\log p(b'|c;\param{bow})]
+		\loss{bow}(\param{bow}) = - \mathbb{E} [\log p(b'|s;\param{bow})]
 	\end{equation}
 
 	\textbf{Adversarial Loss:}
 	The autoencoder tries to maximize the Shannon entropy of the predicted distribution $b$.
 	\begin{equation}
-		\loss{badv}(\param{E}) = \mathcal{H}(p_\text{bow}(b|c))
+		\loss{badv}(\param{E}) = \mathcal{H}(p_\text{bow}(b|s))
 	\end{equation}
 \end{frame}
 
