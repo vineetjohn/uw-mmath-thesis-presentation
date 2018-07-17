@@ -22,7 +22,7 @@
 \newcommand{\weight}[1]{\lambda_{\text{#1}}}
 \newcommand{\param}[1]{\theta_{\text{#1}}}
 \newcommand{\tabh}[1]{\multicolumn{1}{c|}{\textbf{#1}}}
-\newcommand{\tabc}[2]{\multicolumn{1}{|c|}{\multirow{#1}{*}{\textbf{#2}}}}
+\newcommand{\tabc}[2]{\multicolumn{1}{|c||}{\multirow{#1}{*}{\textbf{#2}}}}
 
 % Title Slide
 \title{
@@ -384,7 +384,7 @@
 \begin{frame}{Latent Space Classification}
 	\begin{table}[ht]
 		\centering
-		\begin{tabular}{| l | r | r |}
+		\begin{tabular}{| l || r | r |}
 			\hline
 			                                & \tabh{DAE}                  & \tabh{VAE} \\
 			\hline \hline
@@ -420,7 +420,7 @@
 \begin{frame}{Style Transfer Results - Yelp}
 	\begin{table}[ht]
 		\centering
-		\begin{tabular}{| l | r | r | r | r |}
+		\begin{tabular}{| l || r | r | r | r |}
 			\hline
 			\tabc{2}{Model}       & \tabh{Transfer} & \tabh{Content}      & \tabh{Word}    & \tabh{Language} \\
 			                      & \tabh{Strength} & \tabh{Preservation} & \tabh{Overlap} & \tabh{Fluency}  \\
@@ -443,7 +443,7 @@
 \begin{frame}{Style Transfer Results - Amazon}
 	\begin{table}[ht]
 		\centering
-		\begin{tabular}{| l | r | r | r | r |}
+		\begin{tabular}{| l || r | r | r | r |}
 			\hline
 			\tabc{2}{Model}       & \tabh{Transfer} & \tabh{Content}      & \tabh{Word}    & \tabh{Language} \\
 			                      & \tabh{Strength} & \tabh{Preservation} & \tabh{Overlap} & \tabh{Fluency}  \\
@@ -466,7 +466,7 @@
 \begin{frame}{Ablation Tests}
 	\begin{table}[ht]
 		\centering
-		\begin{tabular}{| l | r | r | r | r |}
+		\begin{tabular}{| l || r | r | r | r |}
 			\hline
 			\tabc{2}{Objectives}                                     & \tabh{Transfer} & \tabh{Content}      & \tabh{Word}     & \tabh{Language}   \\
 			                                                         & \tabh{Strength} & \tabh{Preservation} & \tabh{Overlap}  & \tabh{Fluency}    \\
@@ -498,7 +498,7 @@
 	\centering
 	\begin{table}[ht]
 		\centering
-		\begin{tabular}{| p{0.3\linewidth} | p{0.3\linewidth} | p{0.3\linewidth} |}
+		\begin{tabular}{| p{0.3\linewidth} || p{0.3\linewidth} | p{0.3\linewidth} |}
 			\hline
 			\tabc{2}{Original (Positive)}                    & \tabh{DAE Transferred}                                & \tabh{VAE Transferred}                             \\
 			                                                 & \tabh{(Negative)}                                     & \tabh{(Negative)}                                  \\
@@ -520,7 +520,7 @@
 	\centering
 	\begin{table}[ht]
 		\centering
-		\begin{tabular}{| p{0.3\linewidth} | p{0.3\linewidth} | p{0.3\linewidth} |}
+		\begin{tabular}{| p{0.3\linewidth} || p{0.3\linewidth} | p{0.3\linewidth} |}
 			\hline
 			\tabc{2}{Original (Negative)}                          & \tabh{DAE Transferred}                                & \tabh{VAE Transferred}                                      \\
 			                                                       & \tabh{(Positive)}                                     & \tabh{(Positive)}                                           \\
