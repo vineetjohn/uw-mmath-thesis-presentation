@@ -68,16 +68,16 @@
 		\centering
 		\begin{tabular}{ l  c | c | c | c | c |}
 			\cline{3-6}
-			I love this movie & $\rightarrow$ & $0.21$ & $0.32$ & $0.74$ & $0.43$              \\
+			I love this movie              & $\rightarrow$ & $0.21$ & $0.32$ & $0.74$ & $0.43$              \\
 			\cline{3-6}
-			I hate this movie & $\rightarrow$ & $0.45$ & $0.78$ & $0.97$ & $0.17$              \\
+			I hate this movie              & $\rightarrow$ & $0.45$ & $0.78$ & $0.97$ & $0.17$              \\
 			\cline{3-6}
 			\pause
 			\\\multicolumn{6}{c}{{\Huge\color{red}$\Downarrow$}}                                 \\ \\
 			\cline{3-6}
-			I love this movie & $\rightarrow$ & $0.68$ & $0.12$ & $0.33$ & {\color{red}$0.98$} \\
+			I {\color{red}love} this movie & $\rightarrow$ & $0.68$ & $0.12$ & $0.33$ & {\color{red}$0.98$} \\
 			\cline{3-6}
-			I hate this movie & $\rightarrow$ & $0.68$ & $0.12$ & $0.33$ & {\color{red}$0.03$} \\
+			I {\color{red}hate} this movie & $\rightarrow$ & $0.68$ & $0.12$ & $0.33$ & {\color{red}$0.03$} \\
 			\cline{3-6}
 		\end{tabular}
 	\end{table}
@@ -86,7 +86,7 @@
 \begin{frame}{Style and Content in Language}
 	The definition of style and content in language are vague and open to interpretation.
 
-	However, most researchers in the NLP community use discrete or continuous attributes in text like
+	However, researchers in the NLP community use discrete or continuous attributes in text to represent `style'.
 	\begin{itemize}
 		\item Sentiment \citep{hu2017toward,shen2017style,fu2017style}
 		\item Tense \citep{hu2017toward}
@@ -103,7 +103,7 @@
 
 \begin{frame}{Auxiliary Problem Statement}
 	\centering
-	\Huge{Generate \textbf{plausible sentences} in a user-defined style, while retaining the original content of the source sentences}
+	\Huge{Generate \textbf{plausible sentences} in a different style, while retaining the original content of the source sentences}
 \end{frame}
 
 % 
@@ -230,7 +230,7 @@
 	where $y'$ is the true label distribution.
 
 	\textbf{Adversarial Loss:}
-	The adversarial loss that the autoencoder tries to maximize is the Shannon entropy of the predicted distribution $y$.
+	The autoencoder tries to maximize the Shannon entropy of the predicted distribution $y$.
 	\begin{equation}
 		\loss{adv}(\param{E}) = \mathcal{H}(p_\text{dis}(y|c))
 	\end{equation}
@@ -245,13 +245,13 @@
 
 \begin{frame}{Content Discriminator}
 	\textbf{Discriminator Loss:}
-	Given the corpus of sentences, and their bag-of-words representations, we train a bag-of-words classifier that minimizes the negative log-likelihood of the predicted softmax distribution over the predicted vocabulary.
+	Given the corpus of sentences, and their bag-of-words representations, we train a bag-of-words classifier that minimizes the negative log-likelihood of the predicted distribution over the vocabulary words.
 	\begin{equation} \label{eqn:bow-disc-loss}
 		\loss{bow}(\param{bow}) = - \mathbb{E} [\log p(b'|c;\param{bow})]
 	\end{equation}
 
 	\textbf{Adversarial Loss:}
-	The adversarial loss that the autoencoder tries to maximize is the Shannon entropy of the predicted distribution $b$.
+	The autoencoder tries to maximize the Shannon entropy of the predicted distribution $b$.
 	\begin{equation}
 		\loss{badv}(\param{E}) = \mathcal{H}(p_\text{bow}(b|c))
 	\end{equation}
