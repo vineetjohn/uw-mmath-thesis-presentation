@@ -170,9 +170,9 @@
 
 \begin{frame}{Sequence Autoencoder - Deterministic}
 	\textbf{Minimize the negative log-likelihood} of each predicted word, given the previous words.
-	\begin{equation} \label{eqn:dae-rec}
+	\begin{equation*} \label{eqn:dae-rec}
 		\loss{rec}(\param{E},\param{D}; x) = - \sum_{t=1}^T \log p(x_t | h_t, x_{t-1})
-	\end{equation}
+	\end{equation*}
 	where $h_0 = [s; c]$ is the initial hidden state of the decoder.
 
 	Trained using a \textbf{sequence cross-entropy loss}, i.e. the average cross-entropy per time-step.
@@ -203,9 +203,9 @@
 \begin{frame}{Multi-Task Style Classifier}
 	We use a simple multi-layer perceptron (MLP) followed by a softmax distribution over the possible labels
 
-	\begin{equation} \label{eqn:multi-task-loss}
+	\begin{equation*} \label{eqn:multi-task-loss}
 		\loss{mult}(\param{E};\param{mult}) = - \mathbb{E} [\log p(y'|s;\param{mult})]
-	\end{equation}
+	\end{equation*}
 	where $\param{mult}$ are the classifier's parameters for multi-task learning, and $y'$ is the true label distribution.
 \end{frame}
 
@@ -219,16 +219,16 @@
 \begin{frame}{Style Discriminator}
 	\textbf{Discriminator Loss:}
 	Given a set of pairs of features $x$ and labels $y$ in pairs $(x_n, y_n)$, we train a classifier that minimizes the negative log-likelihood of the predicted softmax distribution over the predicted labels.
-	\begin{equation}
+	\begin{equation*}
 		\loss{dis}(\param{dis}) = - \mathbb{E} [\log p(y'|c;\param{dis})]
-	\end{equation}
+	\end{equation*}
 	where $y'$ is the true label distribution.
 
 	\textbf{Adversarial Loss:}
 	The autoencoder tries to maximize the Shannon entropy of the predicted distribution $y$.
-	\begin{equation}
+	\begin{equation*}
 		\loss{adv}(\param{E}) = \mathcal{H}(p_\text{dis}(y|c))
-	\end{equation}
+	\end{equation*}
 \end{frame}
 
 \begin{frame}{Content Discriminator}
@@ -240,16 +240,17 @@
 
 \begin{frame}{Content Discriminator}
 	\textbf{Discriminator Loss:}
-	Given the corpus of sentences, and their bag-of-words representations, we train a bag-of-words classifier that minimizes the negative log-likelihood of the predicted distribution over the vocabulary words.
-	\begin{equation} \label{eqn:bow-disc-loss}
+	Given the corpus of sentences, and their bag-of-words representations, we train a bag-of-words (BoW) classifier that minimizes the negative log-likelihood of the predicted distribution over the vocabulary words.
+	\begin{equation*} \label{eqn:bow-disc-loss}
 		\loss{bow}(\param{bow}) = - \mathbb{E} [\log p(b'|s;\param{bow})]
-	\end{equation}
+	\end{equation*}
+	where $b'$ is the true BoW representation.
 
 	\textbf{Adversarial Loss:}
 	The autoencoder tries to maximize the Shannon entropy of the predicted distribution $b$.
-	\begin{equation}
+	\begin{equation*}
 		\loss{badv}(\param{E}) = \mathcal{H}(p_\text{bow}(b|s))
-	\end{equation}
+	\end{equation*}
 \end{frame}
 
 \begin{frame}{Model Training}
@@ -584,3 +585,4 @@
 
 
 \end{document}
+
