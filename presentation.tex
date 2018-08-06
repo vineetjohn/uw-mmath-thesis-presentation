@@ -175,7 +175,7 @@
 	\end{equation*}
 	where $h_0 = [s; c]$ is the initial hidden state of the decoder.
 
-	Trained using a \textbf{sequence cross-entropy loss}, i.e. the average cross-entropy per time-step.
+	Trained using a sequence \textbf{cross-entropy loss}, i.e. the average cross-entropy per time-step.
 	\begin{equation*}
 		\mathcal{H}_{x'} (x) = - \sum_{i}^V x_{i}' \log (x_i)
 	\end{equation*}
@@ -290,6 +290,39 @@
 	\end{figure}
 \end{frame}
 
+%
+
+\section{Related Work}
+
+\begin{frame}{Cross-Aligned Autoencoder: \citet{shen2017style}}
+    Two non-parallel corpora
+    \begin{itemize}
+        \item $X_1 = {x_1^{(1)} \cdots x_1^{(n)}}$, drawn from $p(x_1|y_1)$
+        \item $X_2 = {x_2^{(1)} \cdots x_2^{(n)}}$, drawn from $p(x_2|y_2)$ 
+    \end{itemize}
+    
+    \textbf{Objective:} Estimate style transferred distributions $p(x_1|x_2;y_1,y_2)$ and $p(x_2|x_1;y_1,y_2)$.
+    
+    \centering
+	\begin{figure}[ht]
+		\includegraphics[width=0.9\textwidth]{images/stca-architecture}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Cross-Aligned Autoencoder: \citet{shen2017style}}
+	\centering
+	\begin{figure}[ht]
+		\includegraphics[width=0.9\textwidth]{images/stca-cross-align}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Style Embedding and Multi-Decoders: \citet{fu2017style}}
+	\centering
+	\begin{figure}[ht]
+		\includegraphics[width=\textwidth]{images/semb-architecture}
+	\end{figure}
+\end{frame}
+
 % 
 
 \section{Experiments}
@@ -370,6 +403,7 @@
 
 	The log-likelihood is reported as a measure of language fluency.
 \end{frame}
+
 
 % 
 
@@ -534,34 +568,6 @@
 
 % 
 
-\section{Related Work}
-
-\begin{frame}{Controlled Text Generation}
-	\centering
-	\begin{figure}[ht]
-		\includegraphics[width=\textwidth]{images/tcg-architecture}
-	\end{figure}
-	\imgsrc{\citet{hu2017toward}}
-\end{frame}
-
-\begin{frame}{Cross-Aligned Style Transfer}
-	\centering
-	\begin{figure}[ht]
-		\includegraphics[width=0.9\textwidth]{images/stca-cross-align}
-	\end{figure}
-	\imgsrc{\citet{shen2017style}}
-\end{frame}
-
-\begin{frame}{Style Transfer using Style Embeddings and Multi-Decoders}
-	\centering
-	\begin{figure}[ht]
-		\includegraphics[width=\textwidth]{images/semb-architecture}
-	\end{figure}
-	\imgsrc{\citet{fu2017style}}
-\end{frame}
-
-% 
-
 \section{Summary}
 
 \begin{frame}{Summary}
@@ -583,6 +589,21 @@
 	\Huge{Questions?}
 \end{frame}
 
+% 
+
+\section{Extra Slides}
+
+\section{Related Work}
+
+\begin{frame}{Controlled Text Generation}
+	\centering
+	\begin{figure}[ht]
+		\includegraphics[width=\textwidth]{images/tcg-architecture}
+	\end{figure}
+	\imgsrc{\citet{hu2017toward}}
+\end{frame}
+
+% 
 
 \end{document}
 
