@@ -46,7 +46,7 @@
 	\begin{itemize}
 		\item Neural networks can model arbitrarily complex functions.
 		\item The initial set of parameters are set randomly.
-		\item The learned parameters usually do not demonstrate a visible pattern.
+		\item The learned parameters usually do not demonstrate visibly interpretable patterns.
 	\end{itemize}
 	$$f(x) + \epsilon = f'(x)$$
 	\centering
@@ -479,8 +479,10 @@
 \section{Results and Analysis}
 
 \begin{frame}{Latent Space Classification}
+	\centering
+	$|c| = 128$, $|s| = 8$
+
 	\begin{table}[ht]
-		\centering
 		\begin{tabular}{| l || r | r |}
 			\hline
 			                                & \tabh{DAE}                  & \tabh{VAE} \\
