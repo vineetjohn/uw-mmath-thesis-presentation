@@ -175,7 +175,9 @@
 	\end{equation*}
 	where $h_0 = [s; c]$ is the initial hidden state of the decoder.
 
-	Trained using a sequence \textbf{cross-entropy loss}, i.e. the average cross-entropy per time-step.
+	\noindent\rule{\textwidth}{0.5pt}
+
+	Trained using a sequence \textbf{cross-entropy loss}
 	\begin{equation*}
 		\mathcal{H}_{x'} (x) = - \sum_{i}^V x_{i}' \log (x_i)
 	\end{equation*}
@@ -202,11 +204,22 @@
 
 \begin{frame}{Multi-Task Style Classifier}
 	We use a simple multi-layer perceptron (MLP) followed by a softmax distribution over the possible labels
-
 	\begin{equation*} \label{eqn:multi-task-loss}
 		\loss{mult}(\param{E};\param{mult}) = - \mathbb{E} [\log p(y'|s;\param{mult})]
 	\end{equation*}
 	where $\param{mult}$ are the classifier's parameters for multi-task learning, and $y'$ is the true label distribution.
+
+	\noindent\rule{\textwidth}{0.5pt}
+
+	\centering
+	\textbf{Example:}
+	\begin{tabular}{ l  c | c | c | c | c |}
+		\cline{3-6}
+		$y'$ & $\rightarrow$ & $0$    & $0$    & $1$    & $0$    \\
+		\cline{3-6}
+		$y$  & $\rightarrow$ & $0.01$ & $0.07$ & $0.91$ & $0.01$ \\
+		\cline{3-6}
+	\end{tabular}
 \end{frame}
 
 \begin{frame}{Style Discriminator}
@@ -224,11 +237,37 @@
 	\end{equation*}
 	where $y'$ is the true label distribution.
 
+	\noindent\rule{\textwidth}{0.5pt}
+
+	\centering
+	\textbf{Example:}
+	\begin{tabular}{ l  c | c | c | c | c |}
+		\cline{3-6}
+		$y'$ & $\rightarrow$ & $0$    & $0$    & $1$    & $0$    \\
+		\cline{3-6}
+		$y$  & $\rightarrow$ & $0.01$ & $0.07$ & $0.91$ & $0.01$ \\
+		\cline{3-6}
+	\end{tabular}
+\end{frame}
+
+\begin{frame}{Style Discriminator}
 	\textbf{Adversarial Loss:}
 	The autoencoder tries to maximize the Shannon entropy of the predicted distribution $y$.
 	\begin{equation*}
 		\loss{adv}(\param{E}) = \mathcal{H}(p_\text{dis}(y|c))
 	\end{equation*}
+
+	\noindent\rule{\textwidth}{0.5pt}
+
+	\centering
+	\textbf{Example:}
+	\begin{tabular}{ l  c | c | c | c | c |}
+		\cline{3-6}
+		$y'$ & $\rightarrow$ & $0$    & $0$    & $1$    & $0$    \\
+		\cline{3-6}
+		$y$  & $\rightarrow$ & $0.25$ & $0.24$ & $0.23$ & $0.28$ \\
+		\cline{3-6}
+	\end{tabular}
 \end{frame}
 
 \begin{frame}{Content Discriminator}
@@ -246,11 +285,37 @@
 	\end{equation*}
 	where $b'$ is the true BoW representation.
 
+	\noindent\rule{\textwidth}{0.5pt}
+
+	\centering
+	\textbf{Example:}
+	\begin{tabular}{ l  c | c | c | c | c | c | c |}
+		\cline{3-8}
+		$b'$ & $\rightarrow$ & $0$    & $0$    & $0.75$ & $0$    & $0.25$ & $0$    \\
+		\cline{3-8}
+		$b$  & $\rightarrow$ & $0.01$ & $0.02$ & $0.71$ & $0.01$ & $0.24$ & $0.01$ \\
+		\cline{3-8}
+	\end{tabular}
+\end{frame}
+
+\begin{frame}{Content Discriminator}
 	\textbf{Adversarial Loss:}
 	The autoencoder tries to maximize the Shannon entropy of the predicted distribution $b$.
 	\begin{equation*}
 		\loss{badv}(\param{E}) = \mathcal{H}(p_\text{bow}(b|s))
 	\end{equation*}
+
+	\noindent\rule{\textwidth}{0.5pt}
+
+	\centering
+	\textbf{Example:}
+	\begin{tabular}{ l  c | c | c | c | c | c | c |}
+		\cline{3-8}
+		$b'$ & $\rightarrow$ & $0$    & $0$    & $0.75$ & $0$    & $0.25$ & $0$    \\
+		\cline{3-8}
+		$b$  & $\rightarrow$ & $0.16$ & $0.16$ & $0.18$ & $0.15$ & $0.16$ & $0.19$ \\
+		\cline{3-8}
+	\end{tabular}
 \end{frame}
 
 \begin{frame}{Model Training}
@@ -295,15 +360,15 @@
 \section{Related Work}
 
 \begin{frame}{Cross-Aligned Autoencoder: \citet{shen2017style}}
-    Two non-parallel corpora
-    \begin{itemize}
-        \item $X_1 = {x_1^{(1)} \cdots x_1^{(n)}}$, drawn from $p(x_1|y_1)$
-        \item $X_2 = {x_2^{(1)} \cdots x_2^{(n)}}$, drawn from $p(x_2|y_2)$ 
-    \end{itemize}
-    
-    \textbf{Objective:} Estimate style transferred distributions $p(x_1|x_2;y_1,y_2)$ and $p(x_2|x_1;y_1,y_2)$.
-    
-    \centering
+	Two non-parallel corpora
+	\begin{itemize}
+		\item $X_1 = {x_1^{(1)} \cdots x_1^{(n)}}$, drawn from $p(x_1|y_1)$
+		\item $X_2 = {x_2^{(1)} \cdots x_2^{(n)}}$, drawn from $p(x_2|y_2)$
+	\end{itemize}
+
+	\textbf{Objective:} Estimate style transferred distributions $p(x_1|x_2;y_1,y_2)$ and $p(x_2|x_1;y_1,y_2)$.
+
+	\centering
 	\begin{figure}[ht]
 		\includegraphics[width=0.9\textwidth]{images/stca-architecture}
 	\end{figure}
@@ -606,4 +671,3 @@
 % 
 
 \end{document}
-
