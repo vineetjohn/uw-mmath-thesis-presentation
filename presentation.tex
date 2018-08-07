@@ -181,18 +181,20 @@
 	\begin{equation*}
 		\mathcal{H}_{x'} (x) = - \sum_{i}^V x_{i}' \log (x_i)
 	\end{equation*}
-	where $V$ is the size of the vocabulary, $x'$ and $x$ are the true and predicted distributions respectively.
+	where $V$ is the size of the vocabulary, $x'$ and $x$ are the true and predicted word distributions respectively.
 \end{frame}
 
 \begin{frame}{Sequence Autoencoder - Variational}
-	The probabilistic sampling and KL divergence losses are applied for both the style space $s$ and the content space $c$, separately. The weights applied to each KL divergence loss are tuned independently as a hyperparameter.
+	The probabilistic sampling and KL divergence losses are applied for both the style space $s$ and the content space $c$, separately.
 
-	\begin{align} \label{eqn:vae-rec}
+	The weights $\weight{skl}$ and $\weight{ckl}$ applied to each KL divergence loss are tuned independently as hyperparameters.
+
+	\begin{align*} \label{eqn:vae-rec}
 		\loss{rec}(\param{E},\param{D}; x) =
-		 & - \mathbb{E}_{q_{E}(s|x) q_{E}(c|x)} [\log p_D(x|s,c)] \nonumber \\
-		 & + \weight{skl} KL(q_{E}(s|x)||p(z))                    \nonumber \\
-		 & + \weight{ckl} KL(q_{E}(c|x)||p(z))
-	\end{align}
+		 & - \mathbb{E}_{q_{E_s}(s|x) q_{E_c}(c|x)} [\log p_D(x|s,c)] \nonumber \\
+		 & + \weight{skl} KL(q_{E_s}(s|x)||p(z))                    \nonumber   \\
+		 & + \weight{ckl} KL(q_{E_c}(c|x)||p(z))
+	\end{align*}
 \end{frame}
 
 \begin{frame}{Multi-Task Style Classifier}
@@ -433,15 +435,17 @@
 
 	The style transfer strength is the ratio of sentences successfully transferred to the target style, to the total number of test sentences, as predicted by a pre-trained CNN text classifier \citep{kim2014convolutional}.
 
-	It is given by the following equation,
 	\begin{equation*}
 		\frac{\sum_{i=1}^{N}{(1 | y_i = y^*)}}{N}
 	\end{equation*}
-	where $N$ is the total number of generated sentences, $y*$ is the style attribute we wish to transfer, and $y_{1, 2 \cdots n}$ are the actual attributes as predicted by the pre-trained classifier.
+	where
+	$N$ is the total number of generated sentences,
+	$y*$ is the style attribute we wish to transfer,
+	$y_{1, 2 \cdots n}$ are the actual attributes as predicted by the pre-trained classifier.
 \end{frame}
 
 \begin{frame}{Content Preservation}
-	Let $W$ be the set of word embeddings in any sentence $s$.
+	Let $W$ be the set of word embeddings \citep{pennington2014glove} in any sentence $s$.
 
 	Then the cosine similarity between two sentences $s_1$ and $s_2$ is obtained by
 	\begin{align*}
@@ -654,7 +658,7 @@
 
 \begin{frame}{Future Work}
 	\begin{itemize}
-		\item Evaluate the model on multi-label transfer problems and benchmark the results (Yahoo questions, artist lyrics)
+		\item Evaluate the model on multi-label transfer tasks (Yahoo questions, artist lyrics)
 		\item Instead of using the empirical mean of style embeddings, align the style embedding of each label to a distinct prior during training, and either sample from or use the mean of the prior at inference time.
 	\end{itemize}
 \end{frame}
@@ -684,8 +688,6 @@
 	\end{figure}
 	\imgsrc{\citet{hu2017toward}}
 \end{frame}
-
-% 
 
 \begin{frame}{Examples of Poor Content Preservation}
 
