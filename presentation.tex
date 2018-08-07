@@ -445,24 +445,24 @@
 \end{frame}
 
 \begin{frame}{Content Preservation}
-	Let $W$ be the set of word embeddings \citep{pennington2014glove} in any sentence $s$.
+	Let $W$ be the set of word embeddings \citep{pennington2014glove} in any sentence $x$.
 
-	Then the cosine similarity between two sentences $s_1$ and $s_2$ is obtained by
+	Then the cosine similarity between two sentences $x_1$ and $x_2$ is obtained by
 	\begin{align*}
 		\text{emb} =    & [min(W);max(W);mean(W)]              \\
 		\text{cossim} = & 1 - \cos(\text{emb}_1, \text{emb}_2)
 	\end{align*}
-	where $\text{emb}_1$ and $\text{emb}_2$ are the sentence embeddings for $s_1$ and $s_2$ respectively.
+	where $\text{emb}_1$ and $\text{emb}_2$ are the sentence embeddings for $x_1$ and $x_2$ respectively.
 
 	The mean cosine similarity of all the sentences in the test dataset is reported as the content preservation.
 \end{frame}
 
 \begin{frame}{Word Overlap}
-	Given a source sentence $x$ and an attribute style transferred sentence $y$, let $w_x$ and $w_y$ be the set of unique words present in $x$ and $y$ respectively.
+	Given a source sentence $x$ and an attribute style transferred sentence $x^*$, let $w_x$ and $w_{x^*}$ be the set of unique words present in $x$ and $x^*$ respectively.
 
 	Then, the word overlap score can be calculated using
 	\begin{equation*}
-		\frac{count(w_x \cap w_y)}{count(w_x \cup w_y)}
+		\frac{count(w_x \cap w_{x^*})}{count(w_x \cup w_{x^*})}
 	\end{equation*}
 	which is simply a normalized measure of overlapping unigrams in the source and target.
 \end{frame}
