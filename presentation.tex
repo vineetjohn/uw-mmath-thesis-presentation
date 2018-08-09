@@ -256,7 +256,7 @@
 	\textbf{Adversarial Loss:}
 	The autoencoder tries to maximize the Shannon entropy of the predicted distribution $y$.
 	\begin{equation*}
-		\loss{adv}(\param{E}) = \mathcal{H}(p_\text{dis}(y|c))
+		\loss{adv}(\param{E}) = \mathcal{H}(y|c;\param{dis})
 	\end{equation*}
 
 	\noindent\rule{\textwidth}{0.5pt}
@@ -304,7 +304,7 @@
 	\textbf{Adversarial Loss:}
 	The autoencoder tries to maximize the Shannon entropy of the predicted distribution $b$.
 	\begin{equation*}
-		\loss{badv}(\param{E}) = \mathcal{H}(p_\text{bow}(b|s))
+		\loss{badv}(\param{E}) = \mathcal{H}(b|s;\param{bow})
 	\end{equation*}
 
 	\noindent\rule{\textwidth}{0.5pt}
